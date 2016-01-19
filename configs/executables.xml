@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File to keep track of executables required for the workflow -->
+
+<tools>
+    <tool name="FASTQC">
+        <location>/home/ritesh/Software/genomics/FastQC/fastqc</location>
+    </tool>
+    <tool name="SICKLE">
+        <location>/home/ritesh/Software/genomics/sickle/sickle</location>
+    </tool>
+</tools>
