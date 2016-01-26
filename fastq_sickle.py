@@ -10,6 +10,14 @@ import utilities
 
 
 def executeFastqTrim_sickle(dataLocation, se_or_pe, outputDir, quality_type = 'illumina', quality_threhold = 20, *pairedFiles):
+    '''
+    :param dataLocation: Folder containing input data as .fq or .fasta
+    :param se_or_pe: 'S' or 'P'
+    :param outputDir:
+    :param quality_type: 'illumina', 'sanger'or 'solexa'
+    :param quality_threhold: integer value
+    param pairedFiles: Pairing of files as specified by user in a dictionary format {'ForwardReads.fq:ReverseReads.fq'}.
+    '''
 
     # Determine the location of executable
     xmlFile = 'configs/executables.xml'

@@ -17,7 +17,7 @@ def removeAdaptors_cutadapt(dataLocation, se_or_pe, adapterDict, fixBaseNumber, 
 
     :param se_or_pe: Single or paired end data. Options - 'S' or 'P'
     :param fixBaseNumber: Remove fixed number of bases. -u option like -u 5 (remove first 5 bases)
-    :param *pairedFiles: Pairing of files as specified by user. Required for paired-end data
+    :param *pairedFiles: Pairing of files as specified by user in a dictionary format {'ForwardReads.fq:ReverseReads.fq'}.
 
     '''
 
