@@ -4,11 +4,12 @@ import os, logging, subprocess
 import read_xml as rx
 import utilities
 
+'''
+    Adapter removal and fixed length trimming using the CUTADAPT tool
+'''
 
 def removeAdaptors_cutadapt(dataLocation, se_or_pe, adapterDict, fixBaseNumber, outputDir, *pairedFiles):
     '''
-    Use CUTADAPT tool
-
     :param adapterDict: Adaptar dictionary in form compatible with "cutadapt". Like [ADAPTER:-a] for a 3' adapter type,
     [ADAPTER:-g] for a 5' adapter,[ADAPTER$:-a] for anchored 3' adapter,[^ADAPTER:-g] for anchored 5' adapter, and
     [ADAPTER:b] for both 5' and 3' adapter type. Similarly, it can take -A, -B and -G for paired versions.
@@ -29,13 +30,13 @@ def removeAdaptors_cutadapt(dataLocation, se_or_pe, adapterDict, fixBaseNumber, 
 
 
     if se_or_pe not in dataType:
-        logging.error('removeAdaptors: Incorrect specification for read data type. Specify S or P, opposed to the provided option - ' + se_or_pe)
+        logging.error('removeAdaptors_cutadapt: Incorrect specification for read data type. Specify S or P, opposed to the provided option - ' + se_or_pe)
         return None
 
     # create output dir if doesn't exist
     if not os.path.exists(outputDir):
         os.makedirs(outputDir)
-        logging.info('removeAdaptors: Directory created at ' + outputDir)
+        logging.info('removeAdaptors_cutadapt: Directory created at ' + outputDir)
 
     # check if correct adapter types specified
     allowedAdapterTypes = ['-a', '-g', '-b', '-A', '-G', '-B'] # As specified by cutadapt
@@ -43,7 +44,7 @@ def removeAdaptors_cutadapt(dataLocation, se_or_pe, adapterDict, fixBaseNumber, 
     userProvidedAdapterTypes = adapterDict.values()
     for type in userProvidedAdapterTypes:
         if type not in allowedAdapterTypes:
-            logging.error('removeAdaptors: Wrong keys provided for specifying adapters. Wrong entry found is : ' + type)
+            logging.error('removeAdaptors_cutadapt: Wrong keys provided for specifying adapters. Wrong entry found is : ' + type)
             return None
 
     # Arrange adapter list to a string
@@ -53,7 +54,7 @@ def removeAdaptors_cutadapt(dataLocation, se_or_pe, adapterDict, fixBaseNumber, 
         adapter_parameter_format = adapter_parameter_format + adapterDict[adapter] + ' ' + adapter + ' '
 
     print('Adapters and parameters :' + adapter_parameter_format)
-    logging.info('removeAdaptors: Adapters and parameters :' + adapter_parameter_format)
+    logging.info('removeAdaptors_cutadapt: Adapters and parameters :' + adapter_parameter_format)
 
     if se_or_pe == 'S':
 
@@ -73,7 +74,7 @@ def removeAdaptors_cutadapt(dataLocation, se_or_pe, adapterDict, fixBaseNumber, 
             cutadapt_command = [tool_path, adapter_parameter_format, '-u',fixBaseNumber,'-o', outPath,fq_file]
 
             print('cutadapt command - ' + ' '.join(cutadapt_command))
-            logging.info('removeAdaptors: cutadapt command - ' + ' '.join(cutadapt_command))
+            logging.info('removeAdaptors_cutadapt: cutadapt command - ' + ' '.join(cutadapt_command))
             p = subprocess.Popen(cutadapt_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             for line in p.stdout:
                 report.write(str(line))
@@ -85,7 +86,7 @@ def removeAdaptors_cutadapt(dataLocation, se_or_pe, adapterDict, fixBaseNumber, 
         # expect a folder and pairing of files. Files should be paired in same way as the adapters are specified.
         pairedFiles_dict = pairedFiles[0]
         if not isinstance(pairedFiles_dict, dict):
-            logging.error('removeAdaptors: requires dictionary format for using the Paired-end trimming')
+            logging.error('removeAdaptors_cutadapt: requires dictionary format for using the Paired-end trimming')
             return None
 
         # Open file for recording cutadapt output
@@ -108,7 +109,7 @@ def removeAdaptors_cutadapt(dataLocation, se_or_pe, adapterDict, fixBaseNumber, 
                 cutadapt_command = [tool_path, adapter_parameter_format, '-u',fixBaseNumber,'-o', st1_outPath, '-p',st2_outPath, st1_file_path, st2_file_path]
 
                 print('cutadapt command - ' + ' '.join(cutadapt_command))
-                logging.info('removeAdaptors: cutadapt command - ' + ' '.join(cutadapt_command))
+                logging.info('removeAdaptors_cutadapt: cutadapt command - ' + ' '.join(cutadapt_command))
                 p = subprocess.Popen(cutadapt_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 for line in p.stdout:
                     report.write(str(line))
